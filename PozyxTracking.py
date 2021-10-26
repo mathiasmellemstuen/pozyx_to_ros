@@ -49,7 +49,28 @@ class PozyxTracking:
         else:
             pass
         
+    def getOrigoDevice(self):
+        for anchor in self.anchors:
+            if anchor.pos.data[0] == 0 and anchor.pos.data[1] == 0:
+                return anchor
 
+        return None
 
     def recalibrateCoordinate(self, offsetX, offsetY, offsetZ):
-        """Recalibrate coordinates for the pozyx system"""
+        """Recalibrate coordinates for the pozyx system, to be removed"""
+
+        origoDevice = self.getOrigoDevice()
+        origo = origoDevice.pos.data
+        newOrigo = [0,0,0]
+
+        # Calculat the new origo for pozyx
+        newOrigo[0] -= (offsetX)
+        newOrigo[1] -= (offsetY)
+        newOrigo[2] -= (offsetZ)
+
+        # Recalculate the coordinated for each anchor
+        
+
+
+
+

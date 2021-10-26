@@ -16,3 +16,4 @@ if __name__ == '__main__':
 
     p = PozyxTracking(anchers = anchers)
 
+    p.recalibrateCoordinate(1500, 1500, 0)

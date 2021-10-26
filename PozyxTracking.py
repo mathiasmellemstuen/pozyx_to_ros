@@ -4,10 +4,14 @@ from pypozyx import *
 class PozyxTracking:
     def __init__(self, port=None, remoteID=0x00, remote=False,
                  anchors=List, algorithm=POZYX_POS_ALG_UWB_ONLY, dimention=POZYX_3D, height=1000):
-        self.deviceID   # ID of the master device
-        self.networkID  # IF of the network
+        self.deviceID = None   # ID of the master device
+        self.networkID = None  # IF of the network
         self.anchors = anchors
-        self.position   # Positon of the tag
+        self.position = None   # Positon of the tag
+        self.height = height
+        self.algorithm = algorithm
+
+        self.p = PozyxSerial(port)
 
         if not remote:
             self.remoteID = None
@@ -44,5 +48,26 @@ class PozyxTracking:
         self.position = Coordinates()
         status = self.p.doPositioning(self.position, self.height, self.algorithm, remote_id=self.remoteID)
 
+        if status == POZYX_SUCCESS: 
+            print(self.positionToString())
+        else: 
+            print(f'Error: Do positioning failed due to {"failure" if status == POZYX_FAILURE else "timeout"}.')
+
     def recalibrateCoordinate(self, offsetX, offsetY, offsetZ):
         """Recalibrate coordinates for the pozyx system"""
+    
+    def positionToString(self):
+        return f'Current position:\nX: {self.position[0]}\nY: {self.position[1]}\n Z: {self.position[2]}'
+
+
+if __name__ == '__main__':
+    anchors = [
+        DeviceCoordinates(0x0001, 1, Coordinates(0,0,2000)),
+        DeviceCoordinates(0x0002, 1, Coordinates(3000,0,2000)),
+        DeviceCoordinates(0x0003, 1, Coordinates(0,3000,2000)),
+        DeviceCoordinates(0x0004, 1, Coordinates(3000,3000,2000))
+    ]
+    pozyxTracking = PozyxTracking(port = "/dev/cu.usbmodem3551385E34381", anchors = anchors)
+
+    while True:
+        pozyxTracking.loop()

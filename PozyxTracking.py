@@ -44,5 +44,12 @@ class PozyxTracking:
         self.position = Coordinates()
         status = self.p.doPositioning(self.position, self.height, self.algorithm, remote_id=self.remoteID)
 
+        if status == POZYX_SUCCESS:
+            pass
+        else:
+            pass
+        
+
+
     def recalibrateCoordinate(self, offsetX, offsetY, offsetZ):
         """Recalibrate coordinates for the pozyx system"""

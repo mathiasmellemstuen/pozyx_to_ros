@@ -23,17 +23,20 @@ class PozyxLocalizer:
     def __init__(self, port=None, remoteID=0x00, remote=False, useProcessing=True,
                  anchors=List, algorithm=POZYX_POS_ALG_UWB_ONLY, dimention=POZYX_2D, height=1000,
                  ip='127.0.01', networkPort=8888, oscUdpClient=None):
-        self.deviceID = None   # ID of the master device
-        self.networkID = None  # IF of the network
-        self.anchors = anchors
-        self.position = None   # Positon of the tag
-        self.height = height
-        self.algorithm = algorithm
-        self.oscUdpClient = oscUdpClient
+        self.deviceID = None        # ID of the master device
+        self.networkID = None       # ID of the network
         self.remoteID = remoteID
-        self.dimension = dimention
 
-        self.p = PozyxSerial(port)
+        self.algorithm = algorithm
+        self.dimension = dimention
+        self.oscUdpClient = oscUdpClient
+
+        self.anchors = anchors
+
+        self.height = height
+        self.position = None   # Positon of the tag
+
+        # self.p = PozyxSerial(port)
 
         if not remote:
             self.remoteID = None

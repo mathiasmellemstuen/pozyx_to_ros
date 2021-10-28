@@ -3,15 +3,10 @@ from pypozyx import *
 from pythonosc.udp_client import SimpleUDPClient
 
 class XYZ:
-    def __init__(self):
-        self.x = 0
-        self.y = 0
-        self.z = 0
-    
-    def __init__(self, x, y, z):
-        self.x = x
-        self.y = y
-        self.z = z
+    def __init__(self, *args):
+        self.x = 0 if len(args) < 1 else args[0]
+        self.y = 0 if len(args) < 2 else args[1]
+        self.z = 0 if len(args) < 3 else args[2]
 
     def __str__(self):
        return f'X: {self.x} Y: {self.y} Z: {self.z}' 
@@ -101,6 +96,11 @@ class PozyxLocalizer:
     def recalibrateCoordinate(self, offsetX, offsetY, offsetZ):
         """Recalibrate coordinates for the pozyx system, to be removed"""
 
+        offset = XYZ()
+        offset.x = offsetX
+        offset.y = offsetY
+        offset.z = offsetZ
+
         origoDevice = self.getOrigoDevice()
         origo = origoDevice.pos.data
         newOrigo = XYZ()
@@ -119,24 +119,22 @@ class PozyxLocalizer:
 
         ## Calculate the new pos for the remaining anchors
         for anchor in self.anchors:
+            for i in range(2):
+                anchorPos = anchor.pos[i]
+                newOrigoPos = newOrigo[i]
+                offsetPos = offset.getList()[i]
+
+            if anchorPos < newOrigoPos:
+                anchorPos -= (abs(anchorPos) + abs(offsetPos))
+            else:
+                anchorPos -= (anchorPos - offsetPos)
+
             # Calculate for X
-            if anchor.pos.x < newOrigo.x:
-                anchor.pos.x = -(abs(anchor.pos.x) + abs(offsetX))
-            else:
-                anchor.pos.x = anchor.pos.x - offsetX
+            #if anchor.pos.x < newOrigo.x:
+                #anchor.pos.x = -(abs(anchor.pos.x) + abs(offsetX))
+            #else:
+                #anchor.pos.x = -(anchor.pos.x - offsetX)
 
-            # Calculate for Y
-            if anchor.pos.y < newOrigo.y:
-                anchor.pos.y = abs(anchor.pos.y) + abs(offsetY)
-            else:
-                anchor.pos.y = anchor.pos.y - offsetY
-
-            # Calulate for Z
-            if anchor.pos.z < newOrigo.z:
-                anchor.pos.z = abs(anchor.pos.z) + abs(offsetZ)
-            else:
-                anchor.pos.z = anchor.pos.z - offsetZ
-    
     def positionToString(self):
         return f'Current position:\nX: {self.position[0] / 1000}\nY: {self.position[1] / 1000}\nZ: {self.position[2] / 1000}'
 
@@ -149,7 +147,7 @@ if __name__ == '__main__':
         DeviceCoordinates(0x6851, 1, Coordinates(176, -3328, 0))
     ]
 
-    localizer = PozyxLocalizer(anchors = anchors, port = "/dev/cu.usbmodem3551385E34381", remoteID=0x6e66)
+    localizer = PozyxLocalizer(anchors = anchors, remoteID=0x6e66)
 
     while True:
         localizer.loop()

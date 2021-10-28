@@ -19,16 +19,17 @@ class XYZ:
     def getList(self):
         return [self.x, self.y, self.z]
 
+
 class PozyxLocalizer:
     def __init__(self, port=None, remoteID=0x00, remote=False, useProcessing=True,
-                 anchors=List, algorithm=POZYX_POS_ALG_UWB_ONLY, dimention=POZYX_2D, height=1000,
+                 anchors=List, algorithm=POZYX_POS_ALG_UWB_ONLY, dimension=POZYX_2D, height=1000,
                  ip='127.0.01', networkPort=8888, oscUdpClient=None):
         self.deviceID = None        # ID of the master device
         self.networkID = None       # ID of the network
         self.remoteID = remoteID
 
         self.algorithm = algorithm
-        self.dimension = dimention
+        self.dimension = dimension
         self.oscUdpClient = oscUdpClient
 
         self.anchors = anchors
@@ -83,7 +84,7 @@ class PozyxLocalizer:
         
     def loop(self):
         self.position = Coordinates()
-        status = self.p.doPositioning(self.position, self.height, self.algorithm, remote_id=self.remoteID)
+        status = self.p.doPositioning(self.position, self.dimension, self.height, self.algorithm, remote_id=self.remoteID)
 
         if status == POZYX_SUCCESS: 
             print(self.positionToString())
@@ -142,14 +143,13 @@ class PozyxLocalizer:
 
 if __name__ == '__main__':
     anchors = [
-        DeviceCoordinates(0x682c, 1, Coordinates(0, 1664, 0)),
-        DeviceCoordinates(0x6869, 1, Coordinates(1339, 0, 0)),
-        DeviceCoordinates(0x680b, 1, Coordinates(3982, 4076, 0)),
-        DeviceCoordinates(0x6851, 1, Coordinates(2056, 4994, 0))
+        DeviceCoordinates(0x682c, 1, Coordinates(-1993, 1084, 0)),
+        DeviceCoordinates(0x6869, 1, Coordinates(1954, -1739, 0)),
+        DeviceCoordinates(0x680b, 1, Coordinates(-355, 1742, 0)),
+        DeviceCoordinates(0x6851, 1, Coordinates(176, -3328, 0))
     ]
 
-    localizer = PozyxLocalizer(anchors = anchors, port="/dev/cu.usbmodem3551385E34381", remoteID=0x6e66)
-
+    localizer = PozyxLocalizer(anchors = anchors, port = "/dev/cu.usbmodem3551385E34381", remoteID=0x6e66)
 
     while True:
         localizer.loop()

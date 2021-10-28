@@ -10,9 +10,18 @@ class XYZ:
     def __str__(self):
        return f'X: {self.x} Y: {self.y} Z: {self.z}' 
 
+    def __isub__(self, other):
+        return XYZ(self.x - other.x, self.y - other.y, self.z - other.z)
+
+    def __eq__(self, other):
+        return XYZ(other.x, other.y, other.z)
+
+    def __getitem__(self, key):
+        t = [self.x, self.y, self.z]
+        return t[key]
+
     def getList(self):
         return [self.x, self.y, self.z]
-
 
 class PozyxLocalizer:
     """
@@ -96,33 +105,21 @@ class PozyxLocalizer:
     def recalibrateCoordinate(self, offsetX, offsetY, offsetZ):
         """Recalibrate coordinates for the pozyx system, to be removed"""
 
-        offset = XYZ()
-        offset.x = offsetX
-        offset.y = offsetY
-        offset.z = offsetZ
-
+        offset = XYZ(offsetX, offsetY, offsetZ)
+        
         origoDevice = self.getOrigoDevice()
         origo = origoDevice.pos.data
-        newOrigo = XYZ()
 
         # Calculat the new origo for pozyx
-        newOrigo.x -= (offsetX)
-        newOrigo.y -= (offsetY)
-        newOrigo.z -= (offsetZ)
+        newOrigo = XYZ()
+        newOrigo -= offset
 
         # Recalculate the coordinated for each anchor
-        ## Get the base for calculations
-        base = XYZ()
-        base.x = self.anchors[0].pos.x
-        base.y = self.anchors[0].pos.y
-        base.z = self.anchors[0].pos.z
-
-        ## Calculate the new pos for the remaining anchors
         for anchor in self.anchors:
             for i in range(2):
                 anchorPos = anchor.pos[i]
                 newOrigoPos = newOrigo[i]
-                offsetPos = offset.getList()[i]
+                offsetPos = offset[i]
 
             if anchorPos < newOrigoPos:
                 anchorPos -= (abs(anchorPos) + abs(offsetPos))

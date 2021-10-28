@@ -138,7 +138,7 @@ class PozyxLocalizer:
     def positionToString(self):
         """Returning a string with the x,y,z coordinates."""
 
-        return f'Current position:\nX: {self.position[0] / 1000}\nY: {self.position[1] / 1000}\nZ: {self.position[2] / 1000}'
+        return f'Current position:\nX: {self.position[0] / 1000}m\nY: {self.position[1] / 1000}m\nZ: {self.position[2] / 1000}m'
 
 
 if __name__ == '__main__':

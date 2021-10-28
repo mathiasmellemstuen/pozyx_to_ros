@@ -18,7 +18,7 @@ class XYZ:
 
 class PozyxTracking:
     def __init__(self, port=None, remoteID=0x00, remote=False, useProcessing=True,
-                 anchors=List, algorithm=POZYX_POS_ALG_UWB_ONLY, dimention=POZYX_3D, height=1000,
+                 anchors=List, algorithm=POZYX_POS_ALG_UWB_ONLY, dimention=POZYX_2D, height=1000,
                  ip='127.0.01', networkPort=8888, oscUdpClient=None):
         self.deviceID = None   # ID of the master device
         self.networkID = None  # IF of the network
@@ -27,6 +27,8 @@ class PozyxTracking:
         self.height = height
         self.algorithm = algorithm
         self.oscUdpClient = oscUdpClient
+        self.remoteID = remoteID
+        self.dimension = dimention
 
         self.p = PozyxSerial(port)
 
@@ -38,8 +40,8 @@ class PozyxTracking:
         else:
             self.p = self.connectToTag(tagName=port)
 
-        if self.useProcessing:
-            oscUdpClient = SimpleUDPClient(id, networkPort)
+        if useProcessing:
+            oscUdpClient = SimpleUDPClient(ip, networkPort)
 
         self.setAnchorsManually()
 
@@ -51,7 +53,12 @@ class PozyxTracking:
         else:
             serialPort = tagName
         
-        return PozyxSerial(serialPort)
+        p = PozyxSerial(serialPort)
+
+        if p is None:
+            print('No Pozyx connected. Check if one is connected')
+
+        return p
 
     def setAnchorsManually(self, saveToFlash=False):
         status = self.p.clearDevices(self.remoteID)
@@ -135,7 +142,7 @@ if __name__ == '__main__':
         DeviceCoordinates(0x6851, 1, Coordinates(2056, 4994, 0))
     ]
 
-    pozyxTracking = PozyxTracking(anchors = anchors, port="/dev/cu.usbmodem3551385E34381")
+    pozyxTracking = PozyxTracking(anchors = anchors, port="/dev/cu.usbmodem3551385E34381", remoteID=0x6e66)
 
 
     while True:

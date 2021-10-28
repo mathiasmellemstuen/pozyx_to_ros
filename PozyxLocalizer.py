@@ -1,27 +1,6 @@
 from typing import List
 from pypozyx import *
-
-class XYZ:
-    def __init__(self, *args):
-        self.x = 0 if len(args) < 1 else args[0]
-        self.y = 0 if len(args) < 2 else args[1]
-        self.z = 0 if len(args) < 3 else args[2]
-
-    def __str__(self):
-       return f'X: {self.x} Y: {self.y} Z: {self.z}' 
-
-    def __isub__(self, other):
-        return XYZ(self.x - other.x, self.y - other.y, self.z - other.z)
-
-    def __eq__(self, other):
-        return XYZ(other.x, other.y, other.z)
-
-    def __getitem__(self, key):
-        t = [self.x, self.y, self.z]
-        return t[key]
-
-    def getList(self):
-        return [self.x, self.y, self.z]
+import Vector3
 
 class PozyxLocalizer:
     """
@@ -105,13 +84,13 @@ class PozyxLocalizer:
     def recalibrateCoordinate(self, offsetX, offsetY, offsetZ):
         """Recalibrate coordinates for the pozyx system, to be removed"""
 
-        offset = XYZ(offsetX, offsetY, offsetZ)
+        offset = Vector3(offsetX, offsetY, offsetZ)
         
         origoDevice = self.getOrigoDevice()
         origo = origoDevice.pos.data
 
         # Calculat the new origo for pozyx
-        newOrigo = XYZ()
+        newOrigo = Vector3()
         newOrigo -= offset
 
         # Recalculate the coordinated for each anchor

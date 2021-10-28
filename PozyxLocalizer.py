@@ -8,6 +8,11 @@ class XYZ:
         self.y = 0
         self.z = 0
     
+    def __init__(self, x, y, z):
+        self.x = x
+        self.y = y
+        self.z = z
+
     def __str__(self):
        return f'X: {self.x} Y: {self.y} Z: {self.z}' 
 
@@ -113,7 +118,7 @@ class PozyxLocalizer:
         for anchor in self.anchors:
             # Calculate for X
             if anchor.pos.x < newOrigo.x:
-                anchor.pos.x = abs(anchor.pos.x) + abs(offsetX)
+                anchor.pos.x = -(abs(anchor.pos.x) + abs(offsetX))
             else:
                 anchor.pos.x = anchor.pos.x - offsetX
 

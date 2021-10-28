@@ -126,12 +126,6 @@ class PozyxLocalizer:
             else:
                 anchorPos -= (anchorPos - offsetPos)
 
-            # Calculate for X
-            #if anchor.pos.x < newOrigo.x:
-                #anchor.pos.x = -(abs(anchor.pos.x) + abs(offsetX))
-            #else:
-                #anchor.pos.x = -(anchor.pos.x - offsetX)
-
     def positionToString(self):
         """Returning a string with the x,y,z coordinates."""
 

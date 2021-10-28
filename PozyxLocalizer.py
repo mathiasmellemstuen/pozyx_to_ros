@@ -101,21 +101,12 @@ class PozyxLocalizer:
         offset.y = offsetY
         offset.z = offsetZ
 
-        origoDevice = self.getOrigoDevice()
-        origo = origoDevice.pos.data
         newOrigo = XYZ()
 
         # Calculat the new origo for pozyx
         newOrigo.x -= (offsetX)
         newOrigo.y -= (offsetY)
         newOrigo.z -= (offsetZ)
-
-        # Recalculate the coordinated for each anchor
-        ## Get the base for calculations
-        base = XYZ()
-        base.x = self.anchors[0].pos.x
-        base.y = self.anchors[0].pos.y
-        base.z = self.anchors[0].pos.z
 
         ## Calculate the new pos for the remaining anchors
         for anchor in self.anchors:
@@ -128,12 +119,6 @@ class PozyxLocalizer:
                 anchorPos -= (abs(anchorPos) + abs(offsetPos))
             else:
                 anchorPos -= (anchorPos - offsetPos)
-
-            # Calculate for X
-            #if anchor.pos.x < newOrigo.x:
-                #anchor.pos.x = -(abs(anchor.pos.x) + abs(offsetX))
-            #else:
-                #anchor.pos.x = -(anchor.pos.x - offsetX)
 
     def positionToString(self):
         """Returning a string with the x,y,z coordinates."""

@@ -13,10 +13,13 @@ class XYZ:
         self.y = y
         self.z = z
 
+    def __str__(self):
+       return f'X: {self.x} Y: {self.y} Z: {self.z}' 
+
     def getList(self):
         return [self.x, self.y, self.z]
 
-class PozyxTracking:
+class PozyxLocalizer:
     def __init__(self, port=None, remoteID=0x00, remote=False, useProcessing=True,
                  anchors=List, algorithm=POZYX_POS_ALG_UWB_ONLY, dimention=POZYX_2D, height=1000,
                  ip='127.0.01', networkPort=8888, oscUdpClient=None):
@@ -131,7 +134,7 @@ class PozyxTracking:
                 anchor.pos.z = anchor.pos.z - offsetZ
     
     def positionToString(self):
-        return f'Current position:\nX: {self.position[0]}\nY: {self.position[1]}\n Z: {self.position[2]}'
+        return f'Current position:\nX: {self.position[0] / 1000}\nY: {self.position[1] / 1000}\nZ: {self.position[2] / 1000}'
 
 
 if __name__ == '__main__':
@@ -142,8 +145,8 @@ if __name__ == '__main__':
         DeviceCoordinates(0x6851, 1, Coordinates(2056, 4994, 0))
     ]
 
-    pozyxTracking = PozyxTracking(anchors = anchors, port="/dev/cu.usbmodem3551385E34381", remoteID=0x6e66)
+    localizer = PozyxLocalizer(anchors = anchors, port="/dev/cu.usbmodem3551385E34381", remoteID=0x6e66)
 
 
     while True:
-        pozyxTracking.loop()
+        localizer.loop()

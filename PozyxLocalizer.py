@@ -1,6 +1,8 @@
+from sysconfig import parse_config_h
 from typing import List
 from pypozyx import *
 import Vector3
+import yaml
 
 class PozyxLocalizer:
     """
@@ -20,7 +22,10 @@ class PozyxLocalizer:
         self.dimension = dimension
         self.anchors = anchors
         self.height = height
-        
+
+        if type(self.anchors) == str: 
+            self.parseYamlConfig(self.anchors)
+
         if not remote:
             self.remoteID = None
 
@@ -31,6 +36,17 @@ class PozyxLocalizer:
 
         self.setAnchorsManually()
 
+    def parseYamlConfig(self, path):
+        anchors = []
+
+        with open(path, "r") as file: 
+            configYaml = yaml.load(file, Loader=yaml.FullLoader)
+            for anchor in configYaml["anchors"]:
+                coordinates = Coordinates(anchor["coordinates"]["x"], anchor["coordinates"]["y"], anchor["coordinates"]["z"])
+                dc = DeviceCoordinates(anchor["id"], anchor["flag"], coordinates)
+                anchors.append(dc)
+
+        self.anchors = anchors
 
     def createSerialConnectionToTag(self, tagName=None):
         """
@@ -110,7 +126,6 @@ class PozyxLocalizer:
 
         return f'Current position:\nX: {self.position[0] / 1000}m\nY: {self.position[1] / 1000}m\nZ: {self.position[2] / 1000}m'
 
-
 if __name__ == '__main__':
     anchors = [
         DeviceCoordinates(0x682c, 1, Coordinates(-1993, 1084, 0)),
@@ -119,7 +134,7 @@ if __name__ == '__main__':
         DeviceCoordinates(0x6851, 1, Coordinates(176, -3328, 0))
     ]
 
-    localizer = PozyxLocalizer(anchors = anchors)
+    localizer = PozyxLocalizer(anchors = "PozyxConfig.yaml")
 
     while True:
         localizer.loop()

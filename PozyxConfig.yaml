@@ -1,0 +1,29 @@
+anchors: 
+  - anchor1:
+    id: 0x682c
+    flag: 1
+    coordinates:
+      x: -1993
+      y: 1084
+      z: 0
+  - anchor2:
+    id: 0x6869
+    flag: 1
+    coordinates:
+      x: 1954
+      y: -1739
+      z: 0
+  - anchor3:
+    id: 0x680b
+    flag: 1
+    coordinates:
+      x: -355
+      y: 1742
+      z: 0
+  - anchor4:
+    id: 0x6851
+    flag: 1
+    coordinates:
+      x: 176
+      y: -3328
+      z: 0

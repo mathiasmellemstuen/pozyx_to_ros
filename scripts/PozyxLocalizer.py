@@ -2,6 +2,7 @@ from sysconfig import parse_config_h
 from pypozyx import *
 import Vector3
 import yaml
+import rospy
 
 class PozyxLocalizer:
     """
@@ -36,6 +37,9 @@ class PozyxLocalizer:
         self.setAnchorsManually()
 
     def parseYamlConfig(self, path):
+        """
+        Parsing the configuration file to the self.anchors as a list of anchors. 
+        """
         anchors = []
 
         with open(path, "r") as file: 
@@ -54,7 +58,7 @@ class PozyxLocalizer:
 
         if tagName is None:
             serialPort = get_first_pozyx_serial_port()
-            print('Auto assigning serial port: {serialPort}')
+            print('Auto assigning serial port: ' + str(serialPort))
         else:
             serialPort = tagName
         
@@ -94,7 +98,8 @@ class PozyxLocalizer:
         if status == POZYX_SUCCESS: 
             print(self.positionToString())
         else: 
-            print('Error: Do positioning failed due to {"failure" if status == POZYX_FAILURE else "timeout"}.')
+            statusString = "failure" if status == POZYX_FAILURE else "timeout"
+            print('Error: Do positioning failed due to ' + statusString)
 
     def recalibrateCoordinate(self, offsetX, offsetY, offsetZ):
         """Recalibrate coordinates for the pozyx system, to be removed"""
@@ -123,7 +128,7 @@ class PozyxLocalizer:
     def positionToString(self):
         """Returning a string with the x,y,z coordinates."""
 
-        return 'Current position:\nX: {self.position[0] / 1000}m\nY: {self.position[1] / 1000}m\nZ: {self.position[2] / 1000}m'
+        return 'Current position:\nX: ' + str(self.position[0] / 1000) + '\nY: ' + str(self.position[1] / 1000) + 'm\nZ: ' + str(self.position[2] / 1000) + 'm'
 
 if __name__ == '__main__':
     anchors = [

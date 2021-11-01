@@ -1,5 +1,4 @@
 from sysconfig import parse_config_h
-from typing import List
 from pypozyx import *
 import Vector3
 import yaml
@@ -12,7 +11,7 @@ class PozyxLocalizer:
     environment. 
 
     """
-    def __init__(self, port=None, remoteID=0x00, remote=False, anchors=List, algorithm=POZYX_POS_ALG_UWB_ONLY, dimension=POZYX_2D, height=1000):
+    def __init__(self, anchors, port=None, remoteID=0x00, remote=False, algorithm=POZYX_POS_ALG_UWB_ONLY, dimension=POZYX_2D, height=1000):
 
         self.deviceID = None # ID of the master device
         self.position = None # Positon of the tag
@@ -40,7 +39,7 @@ class PozyxLocalizer:
         anchors = []
 
         with open(path, "r") as file: 
-            configYaml = yaml.load(file, Loader=yaml.FullLoader)
+            configYaml = yaml.safe_load(file)
             for anchor in configYaml["anchors"]:
                 coordinates = Coordinates(anchor["coordinates"]["x"], anchor["coordinates"]["y"], anchor["coordinates"]["z"])
                 dc = DeviceCoordinates(anchor["id"], anchor["flag"], coordinates)
@@ -55,7 +54,7 @@ class PozyxLocalizer:
 
         if tagName is None:
             serialPort = get_first_pozyx_serial_port()
-            print(f'Auto assigning serial port: {serialPort}')
+            print('Auto assigning serial port: {serialPort}')
         else:
             serialPort = tagName
         
@@ -95,7 +94,7 @@ class PozyxLocalizer:
         if status == POZYX_SUCCESS: 
             print(self.positionToString())
         else: 
-            print(f'Error: Do positioning failed due to {"failure" if status == POZYX_FAILURE else "timeout"}.')
+            print('Error: Do positioning failed due to {"failure" if status == POZYX_FAILURE else "timeout"}.')
 
     def recalibrateCoordinate(self, offsetX, offsetY, offsetZ):
         """Recalibrate coordinates for the pozyx system, to be removed"""
@@ -124,7 +123,7 @@ class PozyxLocalizer:
     def positionToString(self):
         """Returning a string with the x,y,z coordinates."""
 
-        return f'Current position:\nX: {self.position[0] / 1000}m\nY: {self.position[1] / 1000}m\nZ: {self.position[2] / 1000}m'
+        return 'Current position:\nX: {self.position[0] / 1000}m\nY: {self.position[1] / 1000}m\nZ: {self.position[2] / 1000}m'
 
 if __name__ == '__main__':
     anchors = [

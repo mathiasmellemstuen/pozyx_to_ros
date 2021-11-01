@@ -3,27 +3,27 @@ anchors:
     id: 0x682c
     flag: 1
     coordinates:
-      x: -1993
-      y: 1084
+      x: -2612
+      y: -3376
       z: 0
   - anchor2:
-    id: 0x6869
+    id: 0x6854
     flag: 1
     coordinates:
-      x: 1954
-      y: -1739
+      x: 666
+      y: -3071
       z: 0
   - anchor3:
     id: 0x680b
     flag: 1
     coordinates:
-      x: -355
-      y: 1742
+      x: -2003
+      y: 1008
       z: 0
   - anchor4:
     id: 0x6851
     flag: 1
     coordinates:
-      x: 176
-      y: -3328
+      x: -26
+      y: 2071
       z: 0

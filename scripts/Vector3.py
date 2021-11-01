@@ -5,7 +5,7 @@ class Vector3:
         self.z = 0 if len(args) < 3 else args[2]
 
     def __str__(self):
-       return f'X: {self.x} Y: {self.y} Z: {self.z}' 
+       return 'X: {self.x} Y: {self.y} Z: {self.z}' 
 
     def __isub__(self, other):
         return Vector3(self.x - other.x, self.y - other.y, self.z - other.z)

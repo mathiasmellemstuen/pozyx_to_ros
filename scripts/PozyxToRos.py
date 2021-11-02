@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 from PozyxLocalizer import PozyxLocalizer
-# from geometry_msgs.msg import Vector3
-# import rospy
+from geometry_msgs.msg import Vector3
+import rospy
 
 def pozyxToRos():
     """
     Running a ROS publisher that publishes the position from pozyx as a Vector3.
     """
     path = __file__[0:-22] + "/config/PozyxConfig.yaml"
-    print(path)
+    print("Using config file: " + path)
+
     localizer = PozyxLocalizer(anchors = path)
     pub = rospy.Publisher("pozyx", Vector3, queue_size = 10)
     rospy.init_node("PozyxToRos", anonymous = True)
@@ -20,7 +21,7 @@ def pozyxToRos():
         refreshRate.sleep()
 
 if __name__ == "__main__":
-    # try:
-    pozyxToRos()
-    # except rospy.ROSInterruptException:
-    #     pass
+    try:
+        pozyxToRos()
+    except rospy.ROSInterruptException:
+        pass

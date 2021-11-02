@@ -2,7 +2,7 @@
 <package format="2">
   <name>pozyx_to_ros</name>
   <version>1.0.0</version>
-  <description>Convert the coordinates from a Pozyx device to ROS</description>
+  <description>Get the coordinates from a Pozyx device to a ROS publisher</description>
 
   <maintainer email="mathias.mellemstuen@gmail.com">Mathias Mellemstuen</maintainer>
   <maintainer email="ruben.fosby@hiof.no">Ruben Fosby</maintainer>

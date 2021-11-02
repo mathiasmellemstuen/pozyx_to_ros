@@ -17,3 +17,39 @@ Echoing output from the publisher:
 ```bash
 rostopic echo /pozyx
 ````
+
+## Configuration
+The package can be configured with the [PozyxConfig.yaml](https://github.com/mathiasmellemstuen/pozyx_to_ros/blob/main/config/PozyxConfig.yaml) file. This configuration essentially only holds information of the pozyx tags. 
+
+Example configuration: 
+```yaml
+anchors: 
+  - anchor1:
+    id: 0x682c
+    flag: 1
+    coordinates:
+      x: -2612
+      y: -3376
+      z: 0
+  - anchor2:
+    id: 0x6854
+    flag: 1
+    coordinates:
+      x: 666
+      y: -3071
+      z: 0
+  - anchor3:
+    id: 0x680b
+    flag: 1
+    coordinates:
+      x: -2003
+      y: 1008
+      z: 0
+  - anchor4:
+    id: 0x6851
+    flag: 1
+    coordinates:
+      x: -26
+      y: 2071
+      z: 0
+```

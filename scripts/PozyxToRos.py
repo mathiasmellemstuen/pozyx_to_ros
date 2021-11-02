@@ -2,6 +2,7 @@
 from PozyxLocalizer import PozyxLocalizer
 from geometry_msgs.msg import Vector3
 import rospy
+import pypozyx
 
 def pozyxToRos():
     """
@@ -24,4 +25,6 @@ if __name__ == "__main__":
     try:
         pozyxToRos()
     except rospy.ROSInterruptException:
-        pass
+        print("Program interrupted")
+    except pypozyx.core.PozyxConnectionError:
+        print("Could not connect to Pozyx device")

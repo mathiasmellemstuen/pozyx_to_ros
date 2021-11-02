@@ -22,7 +22,7 @@ rostopic echo /pozyx
 ````
 
 ## Configuration
-The package can be configured with the [PozyxConfig.yaml](https://github.com/mathiasmellemstuen/pozyx_to_ros/blob/main/config/PozyxConfig.yaml) file. This configuration essentially only holds information of the pozyx anchors. 
+The package can be configured with the [config/PozyxConfig.yaml](https://github.com/mathiasmellemstuen/pozyx_to_ros/blob/main/config/PozyxConfig.yaml) file. This configuration essentially only holds information of the pozyx anchors. 
 
 Example configuration: 
 ```yaml

@@ -2,10 +2,10 @@
 A ROS publisher that publish the coordinates from a Pozyx tag connected with USB. This publisher will output in the form a [Vector3](http://docs.ros.org/en/noetic/api/geometry_msgs/html/msg/Vector3.html)
 message.
 
-This package does only contain functionality for getting the coordinates from one tag. It does not provide the full functionality of ROS.
+This package does only contain functionality for getting the coordinates from one tag. It does not provide the full functionality of Pozyx.
 ## Installation 
 1. Clone the repository into the src folder of your ROS workspace.
-2. Run `pip install smbus`
+2. Run `pip install pyserial`
 3. Run `pip install pypozyx` 
 4. Run `catkin_make` at the workspace root.
 

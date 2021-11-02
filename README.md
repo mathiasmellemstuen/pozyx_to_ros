@@ -7,7 +7,7 @@ This package does only contain functionality for getting the coordinates from on
 1. Clone the repository into the src folder of your ROS workspace.
 2. Run `pip install pyserial`
 3. Run `pip install pypozyx` 
-4. Run `catkin_make` at the workspace root. `catkin build -DCATKIN_ENABLE_TESTING=0` if you are building for the TIAGO workspace.
+4. Run `catkin_make` at the workspace root. Use `catkin build -DCATKIN_ENABLE_TESTING=0` instead if you are building for the TIAGO workspace.
 
 ## Example usage
 

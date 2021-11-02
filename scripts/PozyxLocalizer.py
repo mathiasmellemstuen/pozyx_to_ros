@@ -2,7 +2,6 @@ from sysconfig import parse_config_h
 from pypozyx import *
 import Vector3
 import yaml
-import rospy
 
 class PozyxLocalizer:
     """

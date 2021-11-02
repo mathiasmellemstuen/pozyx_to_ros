@@ -4,8 +4,10 @@ message.
 
 This package does only contain functionality for getting the coordinates from one tag. It does not provide the full functionality of ROS.
 ## Installation 
-1. Clone the repository into the src folder of your ROS workspace. 
-2. Run `catkin_make` at the workspace root.
+1. Clone the repository into the src folder of your ROS workspace.
+2. Run `pip install smbus`
+3. Run `pip install pypozyx` 
+4. Run `catkin_make` at the workspace root.
 
 ## Example usage
 

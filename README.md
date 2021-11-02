@@ -1,5 +1,5 @@
 # PozyxToRos
-A ROS publisher that publish the coordinates from a Pozyx tag connected with USB. This publisher will output in the form a [Vector3](http://docs.ros.org/en/noetic/api/geometry_msgs/html/msg/Vector3.html){:target="_blank"}
+A ROS publisher that publish the coordinates from a Pozyx tag connected with USB. This publisher will output in the form a [Vector3](http://docs.ros.org/en/noetic/api/geometry_msgs/html/msg/Vector3.html)
 message.
 
 ## Installation 

@@ -5,7 +5,7 @@
   <description>Get the coordinates from a Pozyx device to a ROS publisher</description>
 
   <maintainer email="mathias.mellemstuen@gmail.com">Mathias Mellemstuen</maintainer>
-  <maintainer email="ruben.fosby@hiof.no">Ruben Fosby</maintainer>
+  <maintainer email="reafed@hotmail.com">Ruben Fosby</maintainer>
   <maintainer email="Tobias@hallingstad.me">Tobias Hallingstad</maintainer>
   
   <license>TODO</license>

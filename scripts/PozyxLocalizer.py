@@ -15,6 +15,13 @@ class PozyxLocalizer:
 
         self.deviceID = None # ID of the master device
         self.position = None # Positon of the tag
+        self.orientation = None
+
+        self.pose = {
+            "position": None,
+            "orientation": None
+        }
+
         self.pozyx = None
         self.remoteID = remoteID
         self.algorithm = algorithm
@@ -79,7 +86,7 @@ class PozyxLocalizer:
             status &= self.pozyx.addDevice(anchor, self.remoteID)
         
         if len(self.anchors) > 4:
-            status &= self.pozyx.setSelectionOfAnchors(POZYX_ANCHOR_SEL_AUTO)
+            status &= self.pozyx.setSelectionOfAnchors(POZYX_ANCHOR_SEL_AUTO,len(self.anchors), remote_id=self.remoteID)
 
         if saveToFlash:
             self.pozyx.saveAnchorIds(remote_id=self.remoteID)
@@ -92,7 +99,13 @@ class PozyxLocalizer:
         Getting the position of the connected tag and returning it. 
         """
         self.position = Coordinates()
+        self.orientation = Quaternion()
+
+        self.pose["position"] = Coordinates()
+        self.pose["orientation"] = Quaternion()
+
         status = self.pozyx.doPositioning(self.position, self.dimension, self.height, self.algorithm, remote_id=self.remoteID)
+        self.pozyx.getQuaternion(self.orientation, remote_id=self.remoteID)
 
         if status == POZYX_SUCCESS: 
             print(self.positionToString())

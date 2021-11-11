@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from PozyxLocalizer import PozyxLocalizer
-from geometry_msgs.msg import Vector3
+from geometry_msgs.msg import Vector3, Pose, Point, Quaternion
 import rospy
 import pypozyx
 
@@ -12,13 +12,17 @@ def pozyxToRos():
     print("Using config file: " + path)
 
     localizer = PozyxLocalizer(anchors = path)
-    pub = rospy.Publisher("pozyx", Vector3, queue_size = 10)
+    # pub = rospy.Publisher("pozyx", Vector3, queue_size = 10)
+    pub = rospy.Publisher("pozyx", Pose, queue_size = 10)
     rospy.init_node("PozyxToRos", anonymous = True)
     refreshRate = rospy.Rate(10)
 
     while not rospy.is_shutdown():
         localizer.loop()
-        pub.publish(Vector3(localizer.position.x, localizer.position.y, localizer.position.z))
+        # pub.publish(Vector3(localizer.position.x, localizer.position.y, localizer.position.z))
+        point = Point(localizer.position.x, localizer.position.y, localizer.position.z)
+        quaternion = Quaternion(localizer.orientation.x, localizer.orientation.y, localizer.orientation.z, localizer.orientation.w) 
+        pub.publish(Pose(point, quaternion)) 
         refreshRate.sleep()
 
 if __name__ == "__main__":

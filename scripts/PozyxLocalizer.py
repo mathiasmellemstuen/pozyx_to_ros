@@ -108,7 +108,7 @@ class PozyxLocalizer:
         self.pozyx.getQuaternion(self.orientation, remote_id=self.remoteID)
 
         if status == POZYX_SUCCESS: 
-            print(self.positionToString())
+            print(self.posAndOrientatonToString())
         else: 
             statusString = "failure" if status == POZYX_FAILURE else "timeout"
             print('Error: Do positioning failed due to ' + statusString)
@@ -137,10 +137,9 @@ class PozyxLocalizer:
             else:
                 anchorPos -= (anchorPos - offsetPos)
 
-    def positionToString(self):
+    def posAndOrientatonToString(self):
         """Returning a string with the x,y,z coordinates."""
-
-        return 'Current position:\nX: ' + str(self.position[0] / 1000) + 'm\nY: ' + str(self.position[1] / 1000) + 'm\nZ: ' + str(self.position[2] / 1000) + 'm'
+        return 'Current position:\n  ' + str(self.position) + '\nCurrent orientation\n  ' + str(self.orientation) + '\n'
 
 if __name__ == '__main__':
     anchors = [

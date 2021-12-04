@@ -1,28 +1,24 @@
 #!/usr/bin/env python
 from PozyxLocalizer import PozyxLocalizer
-from geometry_msgs.msg import Vector3, Pose, Point, Quaternion
+import gepmetry_msgs.msg.Pose as MsgPose
 import rospy
 import pypozyx
 
 def pozyxToRos():
     """
-    Running a ROS publisher that publishes the position from pozyx as a Vector3.
+    Running a ROS publisher that publishes the position from pozyx as a ROS Pose.
     """
     path = __file__[0:-22] + "/config/PozyxConfig.yaml"
-    print("Using config file: " + path)
+    print("Using config file:", path)
 
     localizer = PozyxLocalizer(anchors = path)
-    # pub = rospy.Publisher("pozyx", Vector3, queue_size = 10)
-    pub = rospy.Publisher("pozyx", Pose, queue_size = 10)
+    pub = rospy.Publisher("pozyx", MsgPose, queue_size = 10)
     rospy.init_node("PozyxToRos", anonymous = True)
     refreshRate = rospy.Rate(10)
 
     while not rospy.is_shutdown():
         localizer.loop()
-        # pub.publish(Vector3(localizer.position.x, localizer.position.y, localizer.position.z))
-        point = Point(localizer.position.x, localizer.position.y, localizer.position.z)
-        quaternion = Quaternion(localizer.orientation.x, localizer.orientation.y, localizer.orientation.z, localizer.orientation.w) 
-        pub.publish(Pose(point, quaternion)) 
+        pub.publish(localizer.pose) 
         refreshRate.sleep()
 
 if __name__ == "__main__":

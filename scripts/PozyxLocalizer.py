@@ -1,6 +1,10 @@
-from sysconfig import parse_config_h
 from pypozyx import *
-import Vector3
+
+# Import Pose, Point and Quarternion as msg type, to differentiate from Pozyx classes of same name
+import gepmetry_msgs.msg.Pose as MsgPose
+import gepmetry_msgs.msg.Point as MsgPoint
+import gepmetry_msgs.msg.Quarternion as MsgQuaternion
+
 import yaml
 
 class PozyxLocalizer:
@@ -12,17 +16,10 @@ class PozyxLocalizer:
 
     """
     def __init__(self, anchors, port=None, remoteID=0x00, remote=False, algorithm=POZYX_POS_ALG_UWB_ONLY, dimension=POZYX_2D, height=1000):
+        self.deviceID = None    # ID of the master device
+        self.pose = MsgPose()   # Position and orientation of the Pozyx tag in a ROS Pose type
 
-        self.deviceID = None # ID of the master device
-        self.position = None # Positon of the tag
-        self.orientation = None
-
-        self.pose = {
-            "position": None,
-            "orientation": None
-        }
-
-        self.pozyx = None
+        self.pozyx = None           # Pozyx class
         self.remoteID = remoteID
         self.algorithm = algorithm
         self.dimension = dimension
@@ -61,7 +58,6 @@ class PozyxLocalizer:
         """
         Creating a serial connection either automatically or manually with providing the tagName. Returns a PozyxSerial object.
         """
-
         if tagName is None:
             serialPort = get_first_pozyx_serial_port()
             print('Auto assigning serial port: ' + str(serialPort))
@@ -79,7 +75,6 @@ class PozyxLocalizer:
         """
         Using anchors that is provided in self.anchors. 
         """
-
         status = self.pozyx.clearDevices(self.remoteID)
 
         for anchor in self.anchors:
@@ -98,14 +93,19 @@ class PozyxLocalizer:
         """
         Getting the position of the connected tag and returning it. 
         """
-        self.position = Coordinates()
-        self.orientation = Quaternion()
+        # Define variable to store Position and orientation
+        position = Coordinate()
+        orientation = Quaternion()
 
-        self.pose["position"] = Coordinates()
-        self.pose["orientation"] = Quaternion()
+        # Set position and orientation
+        status = self.pozyx.doPositioning(position, self.dimension, self.height, self.algorithm, remote_id=self.remoteID)
+        self.pozyx.getQuaternion(orientation, remote_id=self.remoteID)
 
-        status = self.pozyx.doPositioning(self.position, self.dimension, self.height, self.algorithm, remote_id=self.remoteID)
-        self.pozyx.getQuaternion(self.orientation, remote_id=self.remoteID)
+        # Set ROS pose to values form Pozyx
+        self.pose = Pose(
+            MsgPoint(position.x, position.y, position.z),
+            MsgQuaternion(orientation.x, orientation.y, orientation.z, orientation.w)
+        )
 
         if status == POZYX_SUCCESS: 
             print(self.posAndOrientatonToString())
@@ -113,32 +113,10 @@ class PozyxLocalizer:
             statusString = "failure" if status == POZYX_FAILURE else "timeout"
             print('Error: Do positioning failed due to ' + statusString)
 
-    def recalibrateCoordinate(self, offsetX, offsetY, offsetZ):
-        """Recalibrate coordinates for the pozyx system, to be removed"""
-
-        offset = Vector3(offsetX, offsetY, offsetZ)
-        
-        origoDevice = self.getOrigoDevice()
-        origo = origoDevice.pos.data
-
-        # Calculat the new origo for pozyx
-        newOrigo = Vector3()
-        newOrigo -= offset
-
-        # Recalculate the coordinated for each anchor
-        for anchor in self.anchors:
-            for i in range(2):
-                anchorPos = anchor.pos[i]
-                newOrigoPos = newOrigo[i]
-                offsetPos = offset[i]
-
-            if anchorPos < newOrigoPos:
-                anchorPos -= (abs(anchorPos) + abs(offsetPos))
-            else:
-                anchorPos -= (anchorPos - offsetPos)
-
     def posAndOrientatonToString(self):
-        """Returning a string with the x,y,z coordinates."""
+        """
+        Returning a string with the x,y,z coordinates.
+        """
         return 'Current position:\n  ' + str(self.position) + '\nCurrent orientation\n  ' + str(self.orientation) + '\n'
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from PozyxLocalizer import PozyxLocalizer
-import gepmetry_msgs.msg.Pose as MsgPose
+import geometry_msgs.msg.Pose as MsgPose
 import rospy
 import pypozyx
 
